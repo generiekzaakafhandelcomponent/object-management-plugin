@@ -27,20 +27,20 @@ dockerCompose {
 }
 
 dependencies {
-    implementation("com.ritense.valtimo:core")
-    implementation("com.ritense.valtimo:case")
-    implementation("com.ritense.valtimo:plugin-valtimo")
-    implementation("com.ritense.valtimo:process-document")
-    implementation("com.ritense.valtimo:temporary-resource-storage")
-    implementation("com.ritense.valtimo:value-resolver")
+    compileOnly("com.ritense.valtimo:core")
+    compileOnly("com.ritense.valtimo:case")
+    compileOnly("com.ritense.valtimo:plugin-valtimo")
+    compileOnly("com.ritense.valtimo:process-document")
+    compileOnly("com.ritense.valtimo:temporary-resource-storage")
+    compileOnly("com.ritense.valtimo:value-resolver")
 
-    implementation("com.ritense.valtimo:object-management")
-    implementation("com.ritense.valtimo:objecten-api")
-    implementation("com.ritense.valtimo:objecttypen-api")
+    compileOnly("com.ritense.valtimo:object-management")
+    compileOnly("com.ritense.valtimo:objecten-api")
+    compileOnly("com.ritense.valtimo:objecttypen-api")
 
-    implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
+    compileOnly("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
 
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    compileOnly("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // Testing
     testImplementation("com.ritense.valtimo:local-resource")
