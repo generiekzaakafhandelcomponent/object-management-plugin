@@ -1,6 +1,6 @@
 spring:
   application:
-    name: plugin-sandbox-application
+    name: object-management-plugin-application
   profiles:
     active: dev
   jackson:
