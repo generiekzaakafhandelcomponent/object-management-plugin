@@ -1,71 +1,9 @@
-# Plugin Documentation
+The Valtimo plugin that supports CRUD actions in the ZGW Objects registration.
 
-<!-- Use this page to document your plugin. Below is a suggested structure. -->
+# Release notes 
 
-## Overview
-
-This is a sample plugin demonstrating an API call action. It fetches data from a time API endpoint.
-
-## Dependencies
-
-### Backend
-
-```kotlin
-dependencies {
-    implementation("com.ritense.valtimoplugins:sample-plugin:0.0.1")
-}
-```
-
-### Frontend
-
-```json
-{
-  "dependencies": {
-    "@valtimo-plugins/sample-plugin": "0.0.1"
-  }
-}
-```
-
-In your `app.module.ts`:
-
-```typescript
-import {
-    SamplePluginModule, samplePluginSpecification,
-} from '@valtimo-plugins/sample-plugin';
-
-@NgModule({
-    imports: [
-        SamplePluginModule,
-    ],
-    providers: [
-        {
-            provide: PLUGIN_TOKEN,
-            useValue: [
-                samplePluginSpecification,
-            ]
-        }
-    ]
-})
-```
-
-## Configuration
-
-List the plugin configuration properties and how to set them.
-
-| Property | Type   | Required | Description                          |
-|----------|--------|----------|--------------------------------------|
-| apiUrl   | string | Yes      | The URL of the time API to call      |
-
-## Actions
-
-### Time API test action
-
-Sends a GET request to the configured API URL and returns the timezone response.
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-|           |      |          |             |
-
-## Usage
-
-Explain how to use the plugin in a process, with examples if applicable.
+## 1.0.0
+- The scope of process variables that are passed as part of the `objectData` property to the `create-object` and `update-object` plugin actions has changed.  
+  In versions prior to this one, passed process variables (`pv:*`) would fetch all process variable values with the given name in any of the processes that belonged to a case.
+  This could cause issues if you have process variables with the same name in multiple process instances. (For example when you have a call-activity in your process that is called multiple times.)  
+  From version 1.0.0, process variables will only be looked up in the scope of the process instance that the plugin action is attached to.
