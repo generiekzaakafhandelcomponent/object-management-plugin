@@ -34,25 +34,23 @@ class ObjectManagementAutoConfiguration {
         pluginService: PluginService,
         objectManagementCrudService: ObjectManagementCrudService,
         valueResolverService: ValueResolverService,
-    ): ObjectManagementPluginFactory {
-        return ObjectManagementPluginFactory(
+    ): ObjectManagementPluginFactory =
+        ObjectManagementPluginFactory(
             pluginService,
             objectManagementCrudService,
             valueResolverService,
         )
-    }
 
     @Bean
     @ConditionalOnMissingBean(ObjectManagementCrudService::class)
     fun objectManagementCrudService(
         pluginService: PluginService,
         objectManagementRepository: ObjectManagementRepository,
-        objectManagementFacade: ObjectManagementFacade
-    ): ObjectManagementCrudService {
-        return ObjectManagementCrudService(
+        objectManagementFacade: ObjectManagementFacade,
+    ): ObjectManagementCrudService =
+        ObjectManagementCrudService(
             pluginService,
             objectManagementRepository,
-            objectManagementFacade
+            objectManagementFacade,
         )
-    }
 }

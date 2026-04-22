@@ -18,5 +18,5 @@ package com.ritense.valtimoplugins.objectmanagement.plugin
 
 class DataBindingConfig(
     val key: String,
-    val value: String
+    val value: String,
 )

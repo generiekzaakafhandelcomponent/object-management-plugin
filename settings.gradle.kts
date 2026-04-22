@@ -1,4 +1,4 @@
-rootProject.name = "gzac-plugin-template"
+rootProject.name = "object-management-plugin"
 include(
     "backend",
     "backend:app",

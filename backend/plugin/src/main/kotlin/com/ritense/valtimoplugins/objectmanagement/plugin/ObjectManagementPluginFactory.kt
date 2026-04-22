@@ -28,10 +28,8 @@ import org.springframework.stereotype.Component
 class ObjectManagementPluginFactory(
     pluginService: PluginService,
     val objectManagementCrudService: ObjectManagementCrudService,
-    val valueResolverService: ValueResolverService
+    val valueResolverService: ValueResolverService,
 ) : PluginFactory<ObjectManagementPlugin>(pluginService) {
-
-    override fun create(): ObjectManagementPlugin {
-        return ObjectManagementPlugin(pluginService, objectManagementCrudService, valueResolverService)
-    }
+    override fun create(): ObjectManagementPlugin =
+        ObjectManagementPlugin(pluginService, objectManagementCrudService, valueResolverService)
 }

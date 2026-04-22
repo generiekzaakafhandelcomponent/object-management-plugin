@@ -32,17 +32,17 @@ import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.operaton.bpm.engine.delegate.DelegateExecution
 import java.net.URI
-import java.util.*
+import java.util.UUID
 
 @Plugin(
     key = "object-management",
     title = "Object Management",
-    description = "Plugin for CRUD actions on the Objects registration"
+    description = "Plugin for CRUD actions on the Objects registration",
 )
 open class ObjectManagementPlugin(
     pluginService: PluginService,
     private val objectManagementCrudService: ObjectManagementCrudService,
-    private val valueResolverService: ValueResolverService
+    private val valueResolverService: ValueResolverService,
 ) {
     private val objectMapper = pluginService.getObjectMapper()
 
@@ -50,18 +50,19 @@ open class ObjectManagementPlugin(
         key = "create-object",
         title = "Create Object",
         description = "Create a new Object",
-        activityTypes = [ActivityTypeWithEventName.SERVICE_TASK_START]
+        activityTypes = [ActivityTypeWithEventName.SERVICE_TASK_START],
     )
     open fun createObject(
         execution: DelegateExecution,
         @PluginActionProperty objectManagementConfigurationId: UUID,
         @PluginActionProperty objectData: List<DataBindingConfig>,
-        @PluginActionProperty objectUrlProcessVariableName: String
+        @PluginActionProperty objectUrlProcessVariableName: String,
     ) {
-        val objectUrl = objectManagementCrudService.createObject(
-            objectManagementConfigurationId,
-            getObjectData(objectData, execution),
-        )
+        val objectUrl =
+            objectManagementCrudService.createObject(
+                objectManagementConfigurationId,
+                getObjectData(objectData, execution),
+            )
 
         execution.setVariable(objectUrlProcessVariableName, objectUrl.toString())
     }
@@ -70,18 +71,18 @@ open class ObjectManagementPlugin(
         key = "update-object",
         title = "Update Object",
         description = "Update an existing Object",
-        activityTypes = [ActivityTypeWithEventName.SERVICE_TASK_START]
+        activityTypes = [ActivityTypeWithEventName.SERVICE_TASK_START],
     )
     open fun updateObject(
         execution: DelegateExecution,
         @PluginActionProperty objectUrl: URI,
         @PluginActionProperty objectManagementConfigurationId: UUID,
         @PluginActionProperty objectData: List<DataBindingConfig>,
-        ) {
+    ) {
         objectManagementCrudService.updateObject(
             objectManagementConfigurationId,
             objectUrl,
-            getObjectData(objectData, execution)
+            getObjectData(objectData, execution),
         )
         logger.info { "Successfully updated object with url: $objectUrl" }
     }
@@ -90,14 +91,13 @@ open class ObjectManagementPlugin(
         key = "delete-object",
         title = "Delete Object",
         description = "Delete an existing Object",
-        activityTypes = [ActivityTypeWithEventName.SERVICE_TASK_START]
+        activityTypes = [ActivityTypeWithEventName.SERVICE_TASK_START],
     )
     open fun deleteObject(
         execution: DelegateExecution,
         @PluginActionProperty objectUrl: String,
-        @PluginActionProperty objectManagementConfigurationId: UUID
+        @PluginActionProperty objectManagementConfigurationId: UUID,
     ) {
-
         objectManagementCrudService.deleteObject(objectUrl, objectManagementConfigurationId)
 
         logger.info { "Successfully deleted object with url: $objectUrl" }
@@ -107,33 +107,40 @@ open class ObjectManagementPlugin(
         key = "get-objects-unpaged",
         title = "Get Objects Unpaged",
         description = "Retrieve all Objects of a given object-management id",
-        activityTypes = [ActivityTypeWithEventName.SERVICE_TASK_START]
+        activityTypes = [ActivityTypeWithEventName.SERVICE_TASK_START],
     )
     open fun getObjectsUnpaged(
         execution: DelegateExecution,
         @PluginActionProperty objectManagementConfigurationTitle: String,
-        @PluginActionProperty listOfObjectProcessVariableName: String
+        @PluginActionProperty listOfObjectProcessVariableName: String,
     ) {
         val objects = objectManagementCrudService.getObjectsByObjectManagementTitle(objectManagementConfigurationTitle)
         val processedObject = objects.results.map { it.record.data }
 
         execution.setVariable(listOfObjectProcessVariableName, processedObject)
-        logger.info { "Successfully retrieved ${objects.results.size} objects for object management: $objectManagementConfigurationTitle" }
+        logger.info {
+            "Successfully retrieved ${objects.results.size} objects for object management: $objectManagementConfigurationTitle"
+        }
     }
 
-    private fun getObjectData(keyValueMap: List<DataBindingConfig>, execution: DelegateExecution): JsonNode {
-        val resolvedValuesMap = valueResolverService.resolveValues(
-            execution.businessKey,
-            execution,
-            keyValueMap.map { it.value }
-        )
+    private fun getObjectData(
+        keyValueMap: List<DataBindingConfig>,
+        execution: DelegateExecution,
+    ): JsonNode {
+        val resolvedValuesMap =
+            valueResolverService.resolveValues(
+                execution.businessKey,
+                execution,
+                keyValueMap.map { it.value },
+            )
 
         if (keyValueMap.size != resolvedValuesMap.size) {
-            val failedValues = keyValueMap
-                .filter { !resolvedValuesMap.containsKey(it.value) }
-                .joinToString(", ") { "'${it.key}' = '${it.value}'" }
+            val failedValues =
+                keyValueMap
+                    .filter { !resolvedValuesMap.containsKey(it.value) }
+                    .joinToString(", ") { "'${it.key}' = '${it.value}'" }
             throw IllegalArgumentException(
-                "Error in case: '${execution.businessKey}'. Failed to resolve values: $failedValues".trimMargin()
+                "Error in case: '${execution.businessKey}'. Failed to resolve values: $failedValues".trimMargin(),
             )
         }
 
@@ -157,19 +164,20 @@ open class ObjectManagementPlugin(
         key = "get-object-data-by-url",
         title = "Get object data by object url",
         description = "Retrieve object data by object url",
-        activityTypes = [ActivityTypeWithEventName.SERVICE_TASK_START]
+        activityTypes = [ActivityTypeWithEventName.SERVICE_TASK_START],
     )
     open fun getObjectDataByObjectUrl(
         execution: DelegateExecution,
         @PluginActionProperty objectManagementConfigurationId: UUID,
         @PluginActionProperty objectUrl: String,
-        @PluginActionProperty objectDataProcessVariableName: String
+        @PluginActionProperty objectDataProcessVariableName: String,
     ) {
         logger.debug { "Retrieving object with object url: $objectUrl" }
-        val objectData = objectManagementCrudService
-            .getObjectByObjectUrl(objectManagementConfigurationId, objectUrl)
-            .record
-            .data
+        val objectData =
+            objectManagementCrudService
+                .getObjectByObjectUrl(objectManagementConfigurationId, objectUrl)
+                .record
+                .data
 
         execution.setVariable(objectDataProcessVariableName, objectData)
         logger.info { "Successfully retrieved object with url: $objectUrl" }

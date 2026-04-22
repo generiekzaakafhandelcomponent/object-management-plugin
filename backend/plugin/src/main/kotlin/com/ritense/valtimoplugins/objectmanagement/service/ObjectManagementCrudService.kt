@@ -34,7 +34,7 @@ import java.util.UUID
 class ObjectManagementCrudService(
     private val pluginService: PluginService,
     private val objectManagementRepository: ObjectManagementRepository,
-    private val objectManagementFacade: ObjectManagementFacade
+    private val objectManagementFacade: ObjectManagementFacade,
 ) {
     fun createObject(
         objectManagementId: UUID,
@@ -43,41 +43,43 @@ class ObjectManagementCrudService(
         val objectManagement = getObjectManagement(objectManagementId)
         val objectenApiPlugin = getObjectenApiPlugin(objectManagement.objectenApiPluginConfigurationId)
         val objecttypenApiPlugin = getObjecttypenApiPlugin(objectManagement.objecttypenApiPluginConfigurationId)
-        val objectRequest = ObjectRequest(
-            objecttypenApiPlugin.getObjectTypeUrlById(objectManagement.objecttypeId),
-            ObjectRecord(
-                typeVersion = objectManagement.objecttypeVersion,
-                data = objectData,
-                startAt = LocalDate.now()
+        val objectRequest =
+            ObjectRequest(
+                objecttypenApiPlugin.getObjectTypeUrlById(objectManagement.objecttypeId),
+                ObjectRecord(
+                    typeVersion = objectManagement.objecttypeVersion,
+                    data = objectData,
+                    startAt = LocalDate.now(),
+                ),
             )
-        )
         return objectenApiPlugin.createObject(objectRequest).url
     }
 
     fun updateObject(
         objectManagementId: UUID,
         objectUrl: URI,
-        objectData: JsonNode
+        objectData: JsonNode,
     ): URI {
         val objectManagement = getObjectManagement(objectManagementId)
         val objectenApiPlugin = getObjectenApiPlugin(objectManagement.objectenApiPluginConfigurationId)
         val objecttypenApiPlugin = getObjecttypenApiPlugin(objectManagement.objecttypenApiPluginConfigurationId)
 
-        val objectRequest = ObjectRequest(
-            objecttypenApiPlugin.getObjectTypeUrlById(objectManagement.objecttypeId),
-            ObjectRecord(
-                typeVersion = objectManagement.objecttypeVersion,
-                data = objectData,
-                startAt = LocalDate.now()
+        val objectRequest =
+            ObjectRequest(
+                objecttypenApiPlugin.getObjectTypeUrlById(objectManagement.objecttypeId),
+                ObjectRecord(
+                    typeVersion = objectManagement.objecttypeVersion,
+                    data = objectData,
+                    startAt = LocalDate.now(),
+                ),
             )
-        )
 
         return objectenApiPlugin.objectPatch(objectUrl, objectRequest).url
     }
 
     fun deleteObject(
         objectUrl: String,
-        objectManagementConfigurationId: UUID
+        objectManagementConfigurationId: UUID,
     ) {
         val objectManagement = getObjectManagement(objectManagementConfigurationId)
         val objectenApiPlugin = getObjectenApiPlugin(objectManagement.objectenApiPluginConfigurationId)
@@ -88,46 +90,40 @@ class ObjectManagementCrudService(
     fun getObjectsByObjectManagementTitle(
         objectManagementTitle: String,
         searchString: String? = null,
-        ordering: String? = null
-    ): ObjectsList {
-        return try {
+        ordering: String? = null,
+    ): ObjectsList =
+        try {
             objectManagementFacade.getObjectsUnpaged(
                 objectName = objectManagementTitle,
                 searchString = searchString,
-                ordering = ordering
+                ordering = ordering,
             )
         } catch (e: Exception) {
             throw RuntimeException("Failed to fetch objects for objectManagement: $objectManagementTitle", e)
         }
-    }
 
     fun getObjectByObjectUrl(
         objectManagementConfigurationId: UUID,
         objectUrl: String,
-    ): ObjectWrapper {
-        return try {
+    ): ObjectWrapper =
+        try {
             objectManagementFacade.getObjectByUri(
                 objectName = getObjectManagementTitle(objectManagementConfigurationId),
-                objectUrl = URI(objectUrl)
+                objectUrl = URI(objectUrl),
             )
         } catch (e: Exception) {
             throw RuntimeException("Failed to fetch object with object url: $objectUrl", e)
         }
-    }
 
-    private fun getObjectManagementTitle(objectManagementConfigurationId: UUID): String {
-        return getObjectManagement(objectManagementConfigurationId).title
-    }
+    private fun getObjectManagementTitle(objectManagementConfigurationId: UUID): String =
+        getObjectManagement(objectManagementConfigurationId).title
 
-    private fun getObjectenApiPlugin(objectenApiPluginConfigurationId: UUID): ObjectenApiPlugin {
-        return pluginService.createInstance<ObjectenApiPlugin>(objectenApiPluginConfigurationId)
-    }
+    private fun getObjectenApiPlugin(objectenApiPluginConfigurationId: UUID): ObjectenApiPlugin =
+        pluginService.createInstance<ObjectenApiPlugin>(objectenApiPluginConfigurationId)
 
-    private fun getObjecttypenApiPlugin(objecttypenApiPluginConfigurationId: UUID): ObjecttypenApiPlugin {
-        return pluginService.createInstance<ObjecttypenApiPlugin>(objecttypenApiPluginConfigurationId)
-    }
+    private fun getObjecttypenApiPlugin(objecttypenApiPluginConfigurationId: UUID): ObjecttypenApiPlugin =
+        pluginService.createInstance<ObjecttypenApiPlugin>(objecttypenApiPluginConfigurationId)
 
-    private fun getObjectManagement(objectManagementId: UUID): ObjectManagement {
-        return objectManagementRepository.findById(objectManagementId).orElseThrow()
-    }
+    private fun getObjectManagement(objectManagementId: UUID): ObjectManagement =
+        objectManagementRepository.findById(objectManagementId).orElseThrow()
 }
