@@ -6,3 +6,7 @@ CRUD-operaties op objecten in de Objects API.
 
 - [Getting Started](documentation/getting-started.md) — setup, running, and development instructions
 - [Plugin Documentation](documentation/plugin.md) — plugin details and configuration
+
+## Contact
+
+Ayub Abdulkader (Ritense)
