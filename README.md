@@ -1,11 +1,11 @@
-# Object Management Plugin
+# Object Management-plugin
 
 CRUD-operaties op objecten in de Objects API.
 
-## Documentation
+## Documentatie
 
-- [Getting Started](documentation/getting-started.md) — setup, running, and development instructions
-- [Plugin Documentation](documentation/plugin.md) — plugin details and configuration
+- [Aan de slag](documentation/getting-started.md) — installatie, draaien en ontwikkelinstructies
+- [Plugin-documentatie](documentation/plugin.md) — plugindetails en configuratie
 - [Release notes](documentation/release-notes.md) — versiegeschiedenis en wijzigingen
 
 ## Contact

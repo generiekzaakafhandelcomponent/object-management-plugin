@@ -1,57 +1,57 @@
-# Getting Started
+# Aan de slag
 
-## Prerequisites
+## Vereisten
 
 - Java 21
 - Node.js >= 20
 - Docker & Docker Compose
 
-## Running the application
+## De applicatie draaien
 
-All commands below should be run from the **project root** directory.
+Alle onderstaande commando's voer je uit vanuit de **hoofdmap** van het project.
 
-### 1. Configure environment
+### 1. Omgeving configureren
 
-Copy `.env.properties.example` to `.env.properties` and fill in the required values.
+Kopieer `.env.properties.example` naar `.env.properties` en vul de vereiste waarden in.
 
-### 2. Start Docker dependencies
+### 2. Docker-afhankelijkheden starten
 
-Make sure Docker is running, then start the required services:
+Zorg dat Docker draait en start vervolgens de benodigde services:
 
 ```shell
 ./gradlew :backend:app:composeUp
 ```
 
-### 3. Start the backend
+### 3. De backend starten
 
 ```shell
 ./gradlew :backend:app:bootRun
 ```
 
-### 4. Start the frontend
+### 4. De frontend starten
 
 ```shell
+nvm use 20
 cd frontend
 npm install
-npm run libs-build-all
 npm start
 ```
 
-### Keycloak users
+### Keycloak-gebruikers
 
-The application has a few test users that are preconfigured.
+De applicatie heeft een aantal voorgeconfigureerde testgebruikers.
 
-| Name         | Role           | Username  | Password  |
-|--------------|----------------|-----------|-----------|
-| James Vance  | ROLE_USER      | user      | user      |
-| Asha Miller  | ROLE_ADMIN     | admin     | admin     |
-| Morgan Finch | ROLE_DEVELOPER | developer | developer |
+| Naam         | Rol            | Gebruikersnaam | Wachtwoord |
+|--------------|----------------|----------------|------------|
+| James Vance  | ROLE_USER      | user           | user       |
+| Asha Miller  | ROLE_ADMIN     | admin          | admin      |
+| Morgan Finch | ROLE_DEVELOPER | developer      | developer  |
 
-## Plugin development
+## Plugin-ontwikkeling
 
-The plugin source code is located in:
+De broncode van de plugin staat in:
 - Backend: `backend/plugin/src/`
 - Frontend: `frontend/projects/plugin/src/`
 
-For more information on how to build a plugin, see
-the [Custom Plugin Definition](https://docs.valtimo.nl/features/plugins/plugins/custom-plugin-definition) documentation.
+Voor meer informatie over het bouwen van een plugin, zie de documentatie
+[Custom Plugin Definition](https://docs.valtimo.nl/features/plugins/plugins/custom-plugin-definition).
