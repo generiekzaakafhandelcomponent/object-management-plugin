@@ -1,7 +1,7 @@
 {
   "name": "@valtimo-plugins/object-management",
   "license": "EUPL-1.2",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "peerDependencies": {
     "@angular/common": "19.2.25",
     "@angular/core": "19.2.25"
