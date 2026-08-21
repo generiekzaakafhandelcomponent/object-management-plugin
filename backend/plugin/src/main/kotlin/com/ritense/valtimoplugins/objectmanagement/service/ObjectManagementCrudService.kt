@@ -36,6 +36,8 @@ class ObjectManagementCrudService(
     private val objectManagementRepository: ObjectManagementRepository,
     private val objectManagementFacade: ObjectManagementFacade,
 ) {
+    private val objectMapper = pluginService.getObjectMapper()
+
     fun createObject(
         objectManagementId: UUID,
         objectData: JsonNode,
@@ -114,6 +116,13 @@ class ObjectManagementCrudService(
         } catch (e: Exception) {
             throw RuntimeException("Failed to fetch object with object url: $objectUrl", e)
         }
+
+    fun getObjectData(
+        objectManagementConfigurationId: UUID,
+        objectUrl: URI,
+    ): JsonNode =
+        getObjectByObjectUrl(objectManagementConfigurationId, objectUrl.toString()).record.data
+            ?: objectMapper.createObjectNode()
 
     private fun getObjectManagementTitle(objectManagementConfigurationId: UUID): String =
         getObjectManagement(objectManagementConfigurationId).title
