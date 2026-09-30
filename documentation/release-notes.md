@@ -2,6 +2,10 @@
 
 Overzicht van wijzigingen per versie van de Object Management-plugin.
 
+## 1.2.4
+
+Ondersteuning voor Valtimo 13.48.0.
+
 ## 1.2.3
 De `update-object`-actie haalt nu eerst de bestaande objectdata op en past de geconfigureerde velden daarop toe, in plaats van een object te versturen dat alleen de geconfigureerde velden bevat. Hierdoor wordt niet-geconfigureerde data niet langer overschreven en geweigerd door de schemavalidatie van de Objects API.
 
